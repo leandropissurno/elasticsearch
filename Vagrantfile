@@ -15,12 +15,6 @@ $vm_cpus = 1
 $vb_cpuexecutioncap = 100
 $shared_folders = {}
 
-# Attempt to apply the deprecated environment variable NUM_INSTANCES to
-# $num_instances while allowing config.rb to override it
-if ENV["NUM_INSTANCES"].to_i > 0 && ENV["NUM_INSTANCES"]
-  $num_instances = ENV["NUM_INSTANCES"].to_i
-end
-
 # Use old vb_xxx config variables when set
 def vm_gui
   $vb_gui.nil? ? $vm_gui : $vb_gui
@@ -40,19 +34,10 @@ Vagrant.configure("2") do |config|
   config.hostmanager.manage_guest = true
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
-  # always use Vagrants insecure key
   config.ssh.insert_key = true
-  # forward ssh agent to easily ssh into the different machines
   config.ssh.forward_agent = true
-  #config.ssh.private_key_path = "/home/leandropissurno/.ssh/id_rsa"
 
   config.vm.box = "centos/7"
-  config.vm.provider :virtualbox do |v|
-    # On VirtualBox, we don't have guest additions or a functional vboxsf
-    # in CoreOS, so tell Vagrant that so it can be smarter.
-    v.check_guest_additions = false
-    v.functional_vboxsf     = false
-  end
 
   (1..$num_instances).each do |i|
     config.vm.define vm_name = "%s-%02d" % [$instance_name_prefix, i] do |config|
