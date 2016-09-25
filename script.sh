@@ -18,12 +18,14 @@ EOF
 yum -y install vim
 yum -y install elasticsearch
 yum -y update
+IP=$(ip addr show eth1 | grep inet | cut -d/ -f1 | awk '{ print $2}')
+sed -i -r 's/# cluster.name: my-application/cluster.name: teste/' /etc/elasticsearch/elasticsearch.yml
+sed -i -r 's/# node.name: node-1/node.name: ${HOSTNAME}/' /etc/elasticsearch/elasticsearch.yml
+sed -i -r 's/# network.host:.*/network.host: ${IP}/' /etc/elasticsearch/elasticsearch.yml
+sed -i -r 's/# discovery.zen.ping.unicast.hosts: \["host1", "host2"\]/discovery.zen.ping.unicast.hosts: ["elasticsearch-01", "elasticsearch-02"]/' /etc/elasticsearch/elasticsearch.yml
 systemctl daemon-reload
 systemctl enable elasticsearch.service
 systemctl start elasticsearch.service
-sed -i -r 's/# cluster.name: my-application/cluster.name: teste/' /etc/elasticsearch/elasticsearch.yml
-sed -i -r 's/# node.name: node-1/node.name: ${HOSTNAME}/' /etc/elasticsearch/elasticsearch.yml
-
 
 
 ## NGINX ##
