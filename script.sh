@@ -22,6 +22,7 @@ systemctl daemon-reload
 systemctl enable elasticsearch.service
 systemctl start elasticsearch.service
 sed -i -r 's/# cluster.name: my-application/cluster.name: teste/' /etc/elasticsearch/elasticsearch.yml
+sed -i -r 's/# node.name: node-1/node.name: ${HOSTNAME}/' /etc/elasticsearch/elasticsearch.yml
 
 
 
