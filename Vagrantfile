@@ -3,7 +3,7 @@
 
 Vagrant.require_version ">= 1.6.0"
 
-$num_instances = 6
+$num_instances = 5
 $instance_name_prefix = "elasticsearch"
 $domain = "lab"
 $enable_serial_logging = false
